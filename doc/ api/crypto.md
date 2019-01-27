@@ -19,7 +19,23 @@ const hash = crypto.createHmac('sha256', secret)
 console.log(hash);
 // Prints:
 //   c0fa1bc00531bd78ef38c628449c5102aeabd49b5dc3a2a516ea6ea959d6658e
-```
+Bitcoin Cash wallets are really just collections of key pairs. Hierarchical Deterministic wallets are the state of the art for reliably creating and backing up collections of related keypairs. For more detail read Andreas’s in depth explanation about how they work in Mastering Bitcoin Cash.
+
+BITBOX is an HD wallet which aims to be compliant w/ BIPS 32, 39, 43, 44. When you first fire up BITBOX we create a random mnemonic from 16 bytes of entropy which we then use to create a root seed, master key and 10 default accounts.
+
+Generate mnemonic
+You can configure how much entropy BITBOX uses to create your mnemonic in the config section. More entropy means more words in your mnemonic. By default BITBOX will use 16 bytes and create a 12 word mnemonic.
+
+Entropy Slider
+
+Entropy	Mnemonic length (words)
+128/16	12
+160/20	15
+129/24	18
+224/28	21
+256/32	24
+To do this we’re using NodeJS’s crypto.randomBytes and the wonderful BIP39.js.
+`` `
 
 ## Determining if crypto support is unavailable
 
@@ -60,8 +76,8 @@ added: v9.0.0
   includes a public key and a challenge.
 
 ```js
-const { Certificate } = require('crypto');
-const spkac = getSpkacSomehow();
+const {certificate} = require ('crypto')؛
+const spkac = getSpkacSomehow ()؛
 const challenge = Certificate.exportChallenge(spkac);
 console.log(challenge.toString('utf8'));
 // Prints: the challenge as a UTF8 string
